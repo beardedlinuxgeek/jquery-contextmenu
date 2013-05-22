@@ -12,7 +12,7 @@
 // This plugin is dual-licensed under the GNU General Public License
 //   and the MIT License and is copyright A Beautiful Site, LLC.
 //
-if(jQuery)( function() {
+(function($) {
 	$.extend($.fn, {
 		
 		contextMenu: function(o, callback) {
@@ -23,6 +23,15 @@ if(jQuery)( function() {
 			// 0 needs to be -1 for expected results (no fade)
 			if( o.inSpeed == 0 ) o.inSpeed = -1;
 			if( o.outSpeed == 0 ) o.outSpeed = -1;
+			
+			if ( o.button == 'left' ) {
+				o.button = 0;
+			} else if ( o.button == 'middle' ) {
+				o.button = 1;
+			} else {
+				o.button = 2;
+			}
+			
 			// Loop each context menu
 			$(this).each( function() {
 				var el = $(this);
@@ -37,7 +46,7 @@ if(jQuery)( function() {
 						e.stopPropagation();
 						var srcElement = $(this);
 						$(this).unbind('mouseup');
-						if( evt.button == 2 ) {
+						if( evt.button == o.button ) {
 							// Hide context menus that may be showing
 							$(".contextMenu").hide();
 							// Get this context menu
@@ -129,13 +138,8 @@ if(jQuery)( function() {
 				});
 				
 				// Disable text selection
-				if( $.browser.mozilla ) {
-					$('#' + o.menu).each( function() { $(this).css({ 'MozUserSelect' : 'none' }); });
-				} else if( $.browser.msie ) {
-					$('#' + o.menu).each( function() { $(this).bind('selectstart.disableTextSelect', function() { return false; }); });
-				} else {
-					$('#' + o.menu).each(function() { $(this).bind('mousedown.disableTextSelect', function() { return false; }); });
-				}
+				$('#' + o.menu).each(function() { $(this).bind('mousedown.disableTextSelect', function() { return false; }); });
+
 				// Disable browser context menu (requires both selectors to work in IE/Safari + FF/Chrome)
 				$(el).add($('UL.contextMenu')).bind('contextmenu', function() { return false; });
 				
