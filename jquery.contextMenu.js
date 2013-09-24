@@ -43,6 +43,7 @@
 					var evt = e;
 					evt.stopPropagation();
 					$(this).mouseup( function(e) {
+						var closeMenuTimeout = null;
 						e.stopPropagation();
 						var srcElement = $(this);
 						$(this).unbind('mouseup');
@@ -79,14 +80,28 @@
 							// Show the menu
 							$(document).unbind('click');
 							$(menu).css({ top: y, left: x }).fadeIn(o.inSpeed);
+
 							// Hover events
+							$(menu).mouseover(function(){
+								clearTimeout(closeMenuTimeout)
+							});
 							$(menu).find('A').mouseover( function() {
 								$(menu).find('LI.hover').removeClass('hover');
 								$(this).parent().addClass('hover');
 							}).mouseout( function() {
 								$(menu).find('LI.hover').removeClass('hover');
 							});
-							
+
+							// Close menu when mouse moves out of menu area
+							$(menu).mouseout(function(event){
+								if( event.pageX < x || event.pageX > (x + $(menu).width()) ||
+									event.pageY < y || event.pageY > (y + $(menu).height()) ){
+										closeMenuTimeout = setTimeout(function(){
+											$(document).trigger('click');
+										}, 500);
+								}
+							});
+
 							// Keyboard
 							$(document).keypress( function(e) {
 								switch( e.keyCode ) {
