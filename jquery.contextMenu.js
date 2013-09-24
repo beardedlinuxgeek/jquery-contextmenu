@@ -17,9 +17,12 @@
 		
 		contextMenu: function(o, callback) {
 			// Defaults
-			if( o.menu == undefined ) return false;
-			if( o.inSpeed == undefined ) o.inSpeed = 150;
-			if( o.outSpeed == undefined ) o.outSpeed = 75;
+			o = $.extend({
+				menu:false,
+				inSpeed:150,
+				outSpeed:75,
+				closeAfterMove:500
+			}, o);
 			// 0 needs to be -1 for expected results (no fade)
 			if( o.inSpeed == 0 ) o.inSpeed = -1;
 			if( o.outSpeed == 0 ) o.outSpeed = -1;
@@ -82,9 +85,6 @@
 							$(menu).css({ top: y, left: x }).fadeIn(o.inSpeed);
 
 							// Hover events
-							$(menu).mouseover(function(){
-								clearTimeout(closeMenuTimeout)
-							});
 							$(menu).find('A').mouseover( function() {
 								$(menu).find('LI.hover').removeClass('hover');
 								$(this).parent().addClass('hover');
@@ -93,14 +93,19 @@
 							});
 
 							// Close menu when mouse moves out of menu area
-							$(menu).mouseout(function(event){
-								if( event.pageX < x || event.pageX > (x + $(menu).width()) ||
-									event.pageY < y || event.pageY > (y + $(menu).height()) ){
-										closeMenuTimeout = setTimeout(function(){
-											$(document).trigger('click');
-										}, 500);
-								}
-							});
+							if( o.closeAfterMove > 0 ){
+								$(menu).mouseover(function(){
+									clearTimeout(closeMenuTimeout)
+								});
+								$(menu).mouseout(function(event){
+									if( event.pageX < x || event.pageX > (x + $(menu).width()) ||
+										event.pageY < y || event.pageY > (y + $(menu).height()) ){
+											closeMenuTimeout = setTimeout(function(){
+												$(document).trigger('click');
+											}, o.closeAfterMove);
+									}
+								});
+							}
 
 							// Keyboard
 							$(document).keypress( function(e) {
