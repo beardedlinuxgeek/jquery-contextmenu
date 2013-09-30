@@ -21,7 +21,8 @@
 				menu:false,
 				inSpeed:150,
 				outSpeed:75,
-				closeAfterMove:500
+				closeAfterMove:500,
+				beforeShow:function(menu){ }
 			}, o);
 			// 0 needs to be -1 for expected results (no fade)
 			if( o.inSpeed == 0 ) o.inSpeed = -1;
@@ -88,6 +89,9 @@
 							
 							// Show the menu
 							$(document).unbind('click');
+							if( o.beforeShow ){
+								o.beforeShow(menu);							
+							}
 							$(menu).css({ top: y, left: x }).fadeIn(o.inSpeed);
 
 							// Hover events
