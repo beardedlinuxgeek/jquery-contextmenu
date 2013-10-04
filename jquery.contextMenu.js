@@ -81,12 +81,17 @@
 							(e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
 							(e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
 
-							// Menu defaults to the right of the clicked element
-							// Position to the right if the menu won't fit on the screen to the right
+							/* Menu defaults to the bottom-right of the clicked element
+							 * Position to the left if the menu won't fit on the screen to the right
+							 * Position to the top if the menu won't fit on the screen to the bottom
+							 */
 							if( x + $(menu).width() > $(window).width() ){
 								x -= $(menu).width();
 							}
-							
+							if( y + $(menu).height() > $(window).height() ){
+								y -= $(menu).height();
+							}
+
 							// Show the menu
 							$(document).unbind('click');
 							if( o.beforeShow ){
