@@ -93,7 +93,7 @@
 							}
 
 							// Show the menu
-							$(document).unbind('click');
+							$(document).unbind('click.contextMenu');
 							if( o.beforeShow ){
 								o.beforeShow(el, menu);							
 							}
@@ -116,7 +116,7 @@
 									if( event.pageX < x || event.pageX > (x + $(menu).width()) ||
 										event.pageY < y || event.pageY > (y + $(menu).height()) ){
 											closeMenuTimeout = setTimeout(function(){
-												$(document).trigger('click');
+												$(document).trigger('click.contextMenu');
 											}, o.closeAfterMove);
 									}
 								});
@@ -153,7 +153,7 @@
 							// When items are selected
 							$('#' + o.menu).find('A').unbind('click');
 							$('#' + o.menu).find('LI:not(.disabled) A').click( function() {
-								$(document).unbind('click').unbind('keypress');
+								$(document).unbind('click.contextMenu');
 								$(".contextMenu").hide();
 								// Callback
 								if( callback ) callback( $(this).attr('href').substr(1), $(srcElement), {x: x - offset.left, y: y - offset.top, docX: x, docY: y} );
@@ -162,8 +162,8 @@
 							
 							// Hide bindings
 							setTimeout( function() { // Delay for Mozilla
-								$(document).click( function() {
-									$(document).unbind('click').unbind('keypress');
+								$(document).on("click.contextMenu", function() {
+									$(document).unbind('click.contextMenu');
 									$(menu).fadeOut(o.outSpeed);
 									return false;
 								});
