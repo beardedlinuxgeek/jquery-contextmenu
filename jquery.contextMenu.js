@@ -122,34 +122,6 @@
 								});
 							}
 
-							// Keyboard
-							$(document).keypress( function(e) {
-								switch( e.keyCode ) {
-									case 38: // up
-										if( $(menu).find('LI.hover').size() == 0 ) {
-											$(menu).find('LI:last').addClass('hover');
-										} else {
-											$(menu).find('LI.hover').removeClass('hover').prevAll('LI:not(.disabled)').eq(0).addClass('hover');
-											if( $(menu).find('LI.hover').size() == 0 ) $(menu).find('LI:last').addClass('hover');
-										}
-									break;
-									case 40: // down
-										if( $(menu).find('LI.hover').size() == 0 ) {
-											$(menu).find('LI:first').addClass('hover');
-										} else {
-											$(menu).find('LI.hover').removeClass('hover').nextAll('LI:not(.disabled)').eq(0).addClass('hover');
-											if( $(menu).find('LI.hover').size() == 0 ) $(menu).find('LI:first').addClass('hover');
-										}
-									break;
-									case 13: // enter
-										$(menu).find('LI.hover A').trigger('click');
-									break;
-									case 27: // esc
-										$(document).trigger('click');
-									break
-								}
-							});
-							
 							// When items are selected
 							$('#' + o.menu).find('A').unbind('click');
 							$('#' + o.menu).find('LI:not(.disabled) A').click( function() {
